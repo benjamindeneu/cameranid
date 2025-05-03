@@ -19,14 +19,25 @@
             hls.loadSource(videoSrc);
             hls.attachMedia(video);
             hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                console.log('Manifest parsed, attempting to play video.');
                 video.play();
+            });
+            hls.on(Hls.Events.ERROR, function(event, data) {
+                console.error('HLS.js error:', data);
             });
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
             video.src = videoSrc;
             video.addEventListener('loadedmetadata', function() {
+                console.log('Metadata loaded, attempting to play video.');
                 video.play();
             });
+            video.addEventListener('error', function(event) {
+                console.error('Video error:', event);
+            });
+        } else {
+            console.error('HLS is not supported in this browser.');
         }
     </script>
 </body>
 </html>
+
